@@ -60,3 +60,21 @@ int main() {
  printf("All frames sent and acknowledged!\n");
  return 0;
 }
+
+
+OUTPUT:
+Enter total number of frames to send: 2
+Enter window size: 2
+Sender: Sent frame 0
+Sender: Sent frame 1
+Enter received frame number (or -1 if lost): 0
+Receiver: Received frame 0
+Receiver: Ack sent for frame 0
+Enter ack number received by sender (-1 if none): 0
+Sender: Ack received for frame 0
+Enter received frame number (or -1 if lost): 1
+Receiver: Received frame 1
+Receiver: Ack sent for frame 1
+Enter ack number received by sender (-1 if none): 1
+Sender: Ack received for frame 1
+All frames sent and acknowledged!

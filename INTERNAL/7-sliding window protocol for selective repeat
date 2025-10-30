@@ -3,7 +3,7 @@
 #define MAX_FRAMES 10
 typedef struct {
  int frame_no;
- int acked;
+ int ack;
 } Frame;
 void send_frame(int frame_no) {
  printf("Sender: Sent frame %d\n", frame_no);
@@ -30,11 +30,11 @@ int main() {
  scanf("%d", &window_size);
  for(int i=0; i<total_frames; ++i) {
   window[i].frame_no = i;
-  window[i].acked = 0;
+  window[i].ack = 0;
  }
  while (sender_base < total_frames) {
   while (next_frame_to_send < sender_base + window_size && next_frame_to_send < total_frames) {
-   if (window[next_frame_to_send].acked == 0) {
+   if (window[next_frame_to_send].ack == 0) {
     send_frame(window[next_frame_to_send].frame_no);
    }
    next_frame_to_send++;
@@ -42,37 +42,21 @@ int main() {
   int recv;
   printf("Enter received frame number (or -1 if lost): ");
   scanf("%d", &recv);
-  if (recv >= 0 && recv < total_frames && window[recv].acked == 0) {
+  if (recv >= 0 && recv < total_frames && window[recv].ack == 0) {
    receive_frame(recv);
    send_ack(recv);
-   window[recv].acked = 1;
+   window[recv].ack = 1;
   }
   printf("Enter ack number received by sender (-1 if none): ");
   int ack_no;
   scanf("%d", &ack_no);
-  if (ack_no >= 0 && ack_no < total_frames && window[ack_no].acked == 1) {
+  if (ack_no >= 0 && ack_no < total_frames && window[ack_no].ack == 1) {
    receive_ack(ack_no);
   }
-  while (sender_base < total_frames && window[sender_base].acked == 1) {
+  while (sender_base < total_frames && window[sender_base].ack == 1) {
    sender_base++;
   }
  }
  printf("All frames sent and acknowledged!\n");
  return 0;
 }
-
-OUTPUT:
-Enter total number of frames to send: 2
-Enter window size: 2
-Sender: Sent frame 0
-Sender: Sent frame 1
-Enter received frame number (or -1 if lost): 0
-Receiver: Received frame 0
-Receiver: Ack sent for frame 0
-Enter ack number received by sender (-1 if none): 0
-Sender: Ack received for frame 0
-Enter received frame number (or -1 if lost): 1
-Receiver: Received frame 1
-Receiver: Ack sent for frame 1
-Enter ack number received by sender (-1 if none): -1
-All frames sent and acknowledged!
